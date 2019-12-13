@@ -20,9 +20,51 @@ public abstract class BibTeXEntry {
                         .noneMatch(requiredName::equalsString)
                 ).findFirst();
 
-        if (missingRequiredField.isPresent()) throw new IllegalArgumentException("required field " + missingRequiredField.get() + " was not present");
+        if (missingRequiredField.isPresent())
+            throw new IllegalArgumentException("required field " + missingRequiredField.get() + " was not present");
 
         fields.stream().forEach(this::addField);
+    }
+
+    public static BibTeXEntry fromType(String type, String key, Collection<BibTeXField> fields) {
+        switch (type.toLowerCase()) {
+            case "article":
+                return new Article(key, fields);
+
+            case "book":
+                return new Book(key, fields);
+
+            case "booklet":
+                return new Booklet(key, fields);
+
+            case "inbook":
+                return new InBook(key, fields);
+
+            case "incollection":
+                return new InCollection(key, fields);
+
+            case "inproceedings":
+                return new InProceedings(key, fields);
+
+            case "manual":
+                return new Manual(key, fields);
+
+            case "mastersthesis":
+                return new MastersThesis(key, fields);
+
+            case "misc":
+                return new Misc(key, fields);
+
+            case "phdthesis":
+                return new PhdThesis(key, fields);
+
+            case "techreport":
+                return new TechReport(key, fields);
+
+            case "unpublished":
+                return new Unpublished(key, fields);
+        }
+        throw new IllegalArgumentException("Invalid BibTeXEntry type");
     }
 
     public Set<BibTeXField> getFields() {
@@ -63,7 +105,8 @@ public abstract class BibTeXEntry {
 
         // each entry
         for (BibTeXField field : fields) {
-            retval.append(String.format("+%s+%s+\n", Utils.repeatedCharacter("-", 21), Utils.repeatedCharacter("-", 51)));
+            retval.append(String.format("+%s+%s+\n", Utils.repeatedCharacter("-", 21), Utils.repeatedCharacter("-",
+                    51)));
             retval.append(String.format("| %1$-20s| %2$-50s|\n", field.name, field.value));
         }
         retval.append(String.format("+%s+%s+\n", Utils.repeatedCharacter("-", 21), Utils.repeatedCharacter("-", 51)));

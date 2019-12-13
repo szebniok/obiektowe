@@ -1,9 +1,9 @@
-import java.util.List;
+import java.util.Set;
 
 public class BibTeX {
-    List<BibTeXEntry> entries;
+    Set<BibTeXEntry> entries;
 
-    public BibTeX(List<BibTeXEntry> entries) {
+    public BibTeX(Set<BibTeXEntry> entries) {
         this.entries = entries;
     }
 

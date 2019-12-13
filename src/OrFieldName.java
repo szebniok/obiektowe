@@ -25,7 +25,7 @@ public class OrFieldName {
     }
 
     public boolean equalsString(String s) {
-        return s == first || s == second;
+        return s.equals(first) || s.equals(second);
     }
 
     @Override
