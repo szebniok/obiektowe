@@ -1,3 +1,8 @@
+import de.vandermeer.asciitable.AT_Row;
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciitable.CWC_FixedWidth;
+import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
+
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -96,23 +101,27 @@ public abstract class BibTeXEntry {
 
     @Override
     public String toString() {
-        StringBuilder retval = new StringBuilder();
+        AsciiTable table = new AsciiTable();
+        table.addRule();
+//        table.addRow("a");
+        table.addRow(null, type.toUpperCase() + " (" + key + ")");
 
-        // first line
-        retval.append(String.format("+%s+\n", Utils.repeatedCharacter("-", 73)));
-
-        // first row
-        retval.append(String.format("| %1$-71s |\n", (type.toUpperCase() + " (" + key + ")")));
-
-        // each entry
         for (BibTeXField field : fields) {
-            retval.append(String.format("+%s+%s+\n", Utils.repeatedCharacter("-", 21), Utils.repeatedCharacter("-",
-                    51)));
-            retval.append(String.format("| %1$-20s| %2$-50s|\n", field.name, field.value));
-        }
-        retval.append(String.format("+%s+%s+\n", Utils.repeatedCharacter("-", 21), Utils.repeatedCharacter("-", 51)));
+            table.addRule();
+            String formattedValue = field.value;
 
-        return retval.toString();
+            if (field.name.equals("author") || field.name.equals("editor")) {
+                formattedValue = formattedValue.replace(" and ", "<br> ");
+            }
+
+            AT_Row addedRow = table.addRow(field.name, formattedValue);
+            addedRow.getCells().get(1).getContext().setTextAlignment(TextAlignment.LEFT);
+        }
+        table.addRule();
+
+        table.getRenderer().setCWC(new CWC_FixedWidth().add(15).add(65));
+
+        return table.render();
     }
 
     @Override
