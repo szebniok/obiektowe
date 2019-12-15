@@ -27,12 +27,12 @@ public class Main {
             BibTeX bibTeX = new BibTeXParser(file).getBibTeX();
 
             if (cmd.hasOption("l")) {
-
-            } else if (cmd.hasOption("t")) {
-
-            } else {
-                System.out.println(bibTeX);
+                bibTeX.filterByLastName(cmd.getOptionValue('l'));
             }
+            if (cmd.hasOption('t')) {
+                bibTeX.filterByType(cmd.getOptionValue('t'));
+            }
+            System.out.println(bibTeX);
         } catch (ParseException e) {
             printHelp(options);
         }
