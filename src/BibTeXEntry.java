@@ -13,8 +13,8 @@ public abstract class BibTeXEntry {
     final Set<OrFieldName> optionalFieldsNames;
     final Set<BibTeXField> fields;
 
-    public BibTeXEntry(String type, Set<OrFieldName> requiredFieldsNames, Set<OrFieldName> optionalFieldsNames,
-                       String key, Collection<BibTeXField> fields) {
+    protected BibTeXEntry(String type, Set<OrFieldName> requiredFieldsNames, Set<OrFieldName> optionalFieldsNames,
+                          String key, Collection<BibTeXField> fields) {
         this.type = type;
         this.requiredFieldsNames = requiredFieldsNames;
         this.optionalFieldsNames = optionalFieldsNames;
@@ -103,7 +103,6 @@ public abstract class BibTeXEntry {
     public String toString() {
         AsciiTable table = new AsciiTable();
         table.addRule();
-//        table.addRow("a");
         table.addRow(null, type.toUpperCase() + " (" + key + ")");
 
         for (BibTeXField field : fields) {
@@ -111,7 +110,7 @@ public abstract class BibTeXEntry {
             String formattedValue = field.value;
 
             if (field.name.equals("author") || field.name.equals("editor")) {
-                formattedValue = formattedValue.replace(" and ", "<br> ");
+                formattedValue = formattedValue.replace(" and ", "<br>");
             }
 
             AT_Row addedRow = table.addRow(field.name, formattedValue);

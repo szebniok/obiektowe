@@ -13,7 +13,8 @@ class BibTeXEntryTest {
 
     class IBibTeXEntry extends BibTeXEntry {
         public IBibTeXEntry(Set<BibTeXField> fields) {
-            super("test", Set.of(OrFieldName.or("requiredField1", "requiredField2")), Set.of(OrFieldName.just("optionalField")), "testKey", fields);
+            super("test", Set.of(OrFieldName.or("requiredField1", "requiredField2")), Set.of(OrFieldName.just(
+                    "optionalField")), "testKey", fields);
         }
     }
 
@@ -24,13 +25,17 @@ class BibTeXEntryTest {
 
     @Test
     void constructorShouldCorrectlySetFields() {
-        assertEquals(Set.of(optionalField, requiredField1), new IBibTeXEntry(Set.of(optionalField, requiredField1)).getFields());
-        assertEquals(Set.of(optionalField, requiredField2), new IBibTeXEntry(Set.of(optionalField, requiredField2)).getFields());
+        assertEquals(Set.of(optionalField, requiredField1),
+                new IBibTeXEntry(Set.of(optionalField, requiredField1)).getFields());
+        assertEquals(Set.of(optionalField, requiredField2),
+                new IBibTeXEntry(Set.of(optionalField, requiredField2)).getFields());
     }
 
     @Test
     void constructorShouldIgnoreExcessFields() {
-        assertEquals(Set.of(optionalField, requiredField1), new IBibTeXEntry(Set.of(optionalField, excessField, requiredField1)).getFields());
+        assertEquals(Set.of(optionalField, requiredField1), new IBibTeXEntry(Set.of(optionalField, excessField,
+                requiredField1))
+                .getFields());
     }
 
     @Test
