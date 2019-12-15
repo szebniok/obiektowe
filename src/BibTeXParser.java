@@ -256,26 +256,30 @@ public class BibTeXParser {
         return readWord();
     }
 
-    // value ::= literalString | variable, { '#', literalString | variable }
+    // value ::= number | (literalString | variable, { '#', literalString | variable })
     private String value() {
         String retval = "";
         skipWhitespace();
 
-        if (look() == '"') {
-            retval += literalString();
+        if (Character.isDigit(look())) {
+            retval = number();
         } else {
-            retval += variable();
-        }
-        skipWhitespace();
-        while (look() == '#') {
-            match('#');
-            skipWhitespace();
             if (look() == '"') {
                 retval += literalString();
             } else {
                 retval += variable();
             }
             skipWhitespace();
+            while (look() == '#') {
+                match('#');
+                skipWhitespace();
+                if (look() == '"') {
+                    retval += literalString();
+                } else {
+                    retval += variable();
+                }
+                skipWhitespace();
+            }
         }
 
         return retval;
@@ -295,6 +299,15 @@ public class BibTeXParser {
         return Optional.ofNullable(variables.get(variableName))
                 .orElseThrow(() -> new RuntimeException("no variable with name '" + variableName + "' (referenced on " +
                         "line: " + lineCount + ")"));
+    }
+
+    private String number() {
+        String retval = "";
+        while (Character.isDigit(look())) {
+            retval += readChar();
+        }
+
+        return retval;
     }
 
     // oneLineComment ::= '%', ?whatever?, NEWLINE
