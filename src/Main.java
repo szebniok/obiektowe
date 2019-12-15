@@ -11,8 +11,9 @@ public class Main {
     public static void main(String[] args) {
         Options options = new Options();
         options.addOption("h", "help", false, "Display this help and exit");
-        options.addOption("l", "lastname", true, "Specifies the last name of author/editor of the entries to be displayed");
-        options.addOption("t", "type", true, "Specifies the type of the entries to be displayed");
+        options.addOption("f", "firstname", true, "Specifies the first names of authors/editors of the entries to be displayed");
+        options.addOption("l", "lastname", true, "Specifies the last names of authors/editors of the entries to be displayed");
+        options.addOption("t", "type", true, "Specifies the types of the entries to be displayed");
 
         try {
             HelpFormatter helpFormatter = new HelpFormatter();
@@ -26,6 +27,9 @@ public class Main {
             Path file = Paths.get(cmd.getArgs()[0]);
             BibTeX bibTeX = new BibTeXParser(file).getBibTeX();
 
+            if (cmd.hasOption('f')) {
+                bibTeX.filterByFirstName(cmd.getOptionValue('f'));
+            }
             if (cmd.hasOption("l")) {
                 bibTeX.filterByLastName(cmd.getOptionValue('l'));
             }
