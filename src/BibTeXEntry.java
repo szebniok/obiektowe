@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.function.BiFunction;
 
 public abstract class BibTeXEntry {
     final String type;
@@ -26,43 +27,43 @@ public abstract class BibTeXEntry {
         fields.stream().forEach(this::addField);
     }
 
-    public static BibTeXEntry fromType(String type, String key, Collection<BibTeXField> fields) {
+    public static BiFunction<String, Collection<BibTeXField>, BibTeXEntry> constructorFromType(String type) {
         switch (type.toLowerCase()) {
             case "article":
-                return new Article(key, fields);
+                return Article::new;
 
             case "book":
-                return new Book(key, fields);
+                return Book::new;
 
             case "booklet":
-                return new Booklet(key, fields);
+                return Booklet::new;
 
             case "inbook":
-                return new InBook(key, fields);
+                return InBook::new;
 
             case "incollection":
-                return new InCollection(key, fields);
+                return InCollection::new;
 
             case "inproceedings":
-                return new InProceedings(key, fields);
+                return InProceedings::new;
 
             case "manual":
-                return new Manual(key, fields);
+                return Manual::new;
 
             case "mastersthesis":
-                return new MastersThesis(key, fields);
+                return MastersThesis::new;
 
             case "misc":
-                return new Misc(key, fields);
+                return Misc::new;
 
             case "phdthesis":
-                return new PhdThesis(key, fields);
+                return PhdThesis::new;
 
             case "techreport":
-                return new TechReport(key, fields);
+                return TechReport::new;
 
             case "unpublished":
-                return new Unpublished(key, fields);
+                return Unpublished::new;
         }
         throw new IllegalArgumentException("Invalid BibTeXEntry type");
     }
