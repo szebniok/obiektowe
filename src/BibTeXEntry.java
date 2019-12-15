@@ -94,11 +94,6 @@ public abstract class BibTeXEntry {
         fields.add(field);
     }
 
-    private String borderLine() {
-        return String.format("+%s+%s+", Utils.repeatedCharacter("-", 21), Utils.repeatedCharacter("-", 51));
-    }
-
-
     @Override
     public String toString() {
         AsciiTable table = new AsciiTable();
@@ -139,6 +134,5 @@ public abstract class BibTeXEntry {
     public int hashCode() {
         return Objects.hash(type, key, requiredFieldsNames, optionalFieldsNames, fields);
     }
-
 
 }
