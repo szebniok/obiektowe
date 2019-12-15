@@ -256,32 +256,35 @@ public class BibTeXParser {
         return readWord();
     }
 
-    // value ::= number | (literalString | variable, { '#', literalString | variable })
+    // value ::= number | stringValue
     private String value() {
-        String retval = "";
+        String retval = null;
         skipWhitespace();
 
         if (Character.isDigit(look())) {
             retval = number();
         } else {
-            if (look() == '"') {
-                retval += literalString();
-            } else {
-                retval += variable();
-            }
-            skipWhitespace();
-            while (look() == '#') {
-                match('#');
-                skipWhitespace();
-                if (look() == '"') {
-                    retval += literalString();
-                } else {
-                    retval += variable();
-                }
-                skipWhitespace();
-            }
+            retval = stringValue();
         }
 
+        return retval;
+    }
+
+    // stringValue ::= literalString | variable, { '#', literalString | variable }
+    private String stringValue() {
+        skipWhitespace();
+
+        String retval = "";
+        if (look() == '"') {
+            retval += literalString();
+        } else {
+            retval += variable();
+        }
+        skipWhitespace();
+        if (look() == '#') {
+            match('#');
+            retval += stringValue();
+        }
         return retval;
     }
 
